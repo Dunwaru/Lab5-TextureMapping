@@ -91,6 +91,10 @@ void ShaderManager::LoadVertices()
 
 void ShaderManager::LoadUVs()
 {
+	float points[6] = { 0.00f, 0.66f, 0.00f, 0.33f, 0.33f, 0.33f };
+
+	JiggleWiggle(points);
+
 	static const GLfloat uvVB[] = {
 		0.00f, 1.0f, // LEFT
 		0.00f, 0.66f,
@@ -116,9 +120,9 @@ void ShaderManager::LoadUVs()
 		0.33f, 0.66f,
 		0.66f, 0.66f,
 
-		0.00f, 0.66f, // TOP
-		0.00f, 0.33f,
-		0.33f, 0.33f,
+		points[0], points[1], // TOP
+		points[2], points[3],
+		points[4], points[5],
 		
 		0.00f, 0.66f, // TOP
 		0.33f, 0.33f,
@@ -280,6 +284,8 @@ void ShaderManager::Render()
 	glUniform1i(TextureUniformHandle, Texture0);
 	glUniform1i(TextureUniformHandle1, Texture1);
 
+	glUniform2f(TextureUniformHandle1, m_xVal, m_yVal);
+
 	glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
@@ -289,4 +295,19 @@ void ShaderManager::Shutdown()
 {
 	glDeleteProgram(programObj);
 	glDeleteVertexArrays(1, &vao);
+}
+
+void ShaderManager::JiggleWiggle(float(&array)[6])
+{
+	for (auto pointVal : array)
+	{
+		if (pointVal >= m_Max)
+		{
+			pointVal -= 0.1f;
+		}
+		else if (pointVal <= m_Min)
+		{
+			pointVal += 0.1f;
+		}
+	}
 }

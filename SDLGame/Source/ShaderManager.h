@@ -27,12 +27,18 @@ public:
 
 	void Shutdown();
 
+	void JiggleWiggle(float (&array)[6]);
+
 	void LoadShaderFromFile(const char * shaderfile, GLenum type);
 
 private:
-
 	ShaderManager();
 	~ShaderManager();
+
+	float m_Max = 1.0f;
+	float m_Min = -1.0f;
+	GLfloat m_xVal = 0;
+	GLfloat m_yVal = 0;
 
 	void ProcessShaderFile(GLuint shader, char *shaderData, GLenum type);
 	void LoadVertices();
